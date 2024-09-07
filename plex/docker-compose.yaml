@@ -1,5 +1,3 @@
-version: "3.7"
-
 services:
 
   plex:
@@ -19,6 +17,34 @@ services:
       - ${PLEX_STORAGE}/tmp:/tmp
     restart: unless-stopped
     network_mode: "host" # Solo funciona en Linux
+    networks:
+      dockerserver_network:
+        ipv4_address: 10.0.2.1
+
+  transmission:
+    image : jaymoulin/transmission:3.00-1.6.1
+    command: transmission-daemon -f -g /config
+    volumes:
+      - ./transmission:/config
+      - ${PLEX_STORAGE}/torrents:/downloads
+    ports:
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+    expose:
+      - 9091
+    restart: unless-stopped
+    networks:
+      dockerserver_network:
+        ipv4_address: 10.0.2.2
+
+networks:
+  plex_network:
+      name: 'dockerserver_network'
+      ipam:
+          config:
+            - subnet: 10.0.2.0/24
+
 
   # transmission:
   #   image : jaymoulin/transmission:3.00-1.6.1
