@@ -78,6 +78,9 @@ services:
     environment:
       - USERS=${FTP_USERS}
     restart: always
+    networks:
+      dockerserver_network:
+        ipv4_address: 10.0.1.5
 volumes:
   pihole_data:
   pihole_dnsmasq:
