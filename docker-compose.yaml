@@ -28,7 +28,7 @@ services:
   samba:
     image: dperson/samba # no hay tag con versiones, solo latest
     restart: always
-    command: '-u "${SAMBA_USER};${SAMBA_PASSWORD}" -s "shared;/shared;yes;no" -s "downloads;/downloads;yes;no"'
+    command: '-u "${SAMBA_USER};${SAMBA_PASSWORD}" -s "shared;/shared;yes;yes" -s "downloads;/downloads;yes;no"'
     stdin_open: true
     tty: true
     environment:
@@ -37,7 +37,7 @@ services:
       - 139:139
       - 445:445
     volumes:
-      - samba_shared:/shared
+      - ./shared:/shared
     networks:
       dockerserver_network:
         ipv4_address: 10.0.1.5
@@ -62,7 +62,7 @@ services:
   portainer:
     image: portainer/portainer-ce:2.21.0
     ports:
-      - 8000:8000
+      - 9000:9000
       - 9443:9443
     restart: always
     volumes:
@@ -75,7 +75,6 @@ volumes:
   pihole_data:
   pihole_dnsmasq:
   portainer_data:
-  samba_shared:
 networks:
   dockerserver_network:
       name: 'dockerserver_network'
