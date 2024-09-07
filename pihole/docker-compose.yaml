@@ -15,8 +15,8 @@ services:
       WEBPASSWORD: ${PORTAINER_PASSWORD}
     # Volumes store your data between container upgrades
     volumes:
-       - './etc-pihole/:/etc/pihole/'
-       - './etc-dnsmasq.d/:/etc/dnsmasq.d/'
+       - pihole_data:'/etc/pihole/'
+       - pihole_dnsmasq:'/etc/dnsmasq.d/'
     dns:
       - 127.0.0.1
       - 1.1.1.1
@@ -25,3 +25,6 @@ services:
     cap_add:
       - NET_ADMIN
     restart: unless-stopped
+volumes:
+  pihole_data:
+  pihole_dnsmasq:
