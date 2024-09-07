@@ -71,6 +71,13 @@ services:
     networks:
       dockerserver_network:
         ipv4_address: 10.0.1.4
+  alpine_ftp:
+    image: delfer/alpine-ftp-server
+    ports:
+    - 21:21
+    environment:
+      - USERS=${FTP_USERS}
+    restart: always
 volumes:
   pihole_data:
   pihole_dnsmasq:
