@@ -34,6 +34,25 @@ services:
     networks:
       plex_network:
         ipv4_address: 10.0.2.2
+  
+  flexget:
+    image: wiserain/flexget:3.5
+    volumes:
+      - ./flexget:/config
+      - ./flexget/custom-cont-init.d:/custom-cont-init.d
+      - ${PLEX_STORAGE}/torrents:/downloads
+      - ${PLEX_MEDIA}:/storage
+    ports:
+      - 5050:5050
+    environment:
+      - PUID=1001
+      - PGID=1001
+      - TORRENT_PLUGIN=transmission
+      - FG_WEBUI_PASSWD=${FLEXGET_PASSWORD} # la puedes cambiar por la que quieras
+    restart: unless-stopped
+    networks:
+      plex_network:
+        ipv4_address: 10.0.2.3
 
 networks:
   plex_network:
@@ -41,34 +60,3 @@ networks:
       ipam:
           config:
             - subnet: 10.0.2.0/24
-
-
-  # transmission:
-  #   image : jaymoulin/transmission:3.00-1.6.1
-  #   command: transmission-daemon -f -g /config
-  #   volumes:
-  #     - ./transmission:/config
-  #     - ${STORAGE}/torrents:/downloads
-  #   ports:
-  #     - 9091:9091
-  #     - 51413:51413
-  #     - 51413:51413/udp
-  #   expose:
-  #     - 9091
-  #   restart: unless-stopped
-
-  # flexget:
-  #   image: wiserain/flexget:3.5
-  #   volumes:
-  #     - ./flexget:/config
-  #     - ./flexget/custom-cont-init.d:/custom-cont-init.d
-  #     - ${STORAGE}/torrents:/downloads
-  #     - ${MEDIA}:/storage
-  #   ports:
-  #     - 5050:5050
-  #   environment:
-  #     - PUID=1001
-  #     - PGID=1001
-  #     - TORRENT_PLUGIN=transmission
-  #     - FG_WEBUI_PASSWD=p3l4d0_N3RD # la puedes cambiar por la que quieras
-  #   restart: unless-stopped
