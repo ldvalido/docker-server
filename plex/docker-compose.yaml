@@ -16,10 +16,7 @@ services:
       - ${PLEX_MEDIA}:/media
       - ${PLEX_STORAGE}/tmp:/tmp
     restart: unless-stopped
-    network_mode: "host" # Solo funciona en Linux
-    networks:
-      dockerserver_network:
-        ipv4_address: 10.0.2.1
+    network_mode: "host"
 
   transmission:
     image : jaymoulin/transmission:3.00-1.6.1
@@ -35,12 +32,12 @@ services:
       - 9091
     restart: unless-stopped
     networks:
-      dockerserver_network:
+      plex_network:
         ipv4_address: 10.0.2.2
 
 networks:
   plex_network:
-      name: 'dockerserver_network'
+      name: 'plex_network'
       ipam:
           config:
             - subnet: 10.0.2.0/24
