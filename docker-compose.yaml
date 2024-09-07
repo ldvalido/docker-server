@@ -25,6 +25,22 @@ services:
     networks:
       dockerserver_network:
         ipv4_address: 10.0.1.2
+  samba:
+    image: dperson/samba # no hay tag con versiones, solo latest
+    restart: always
+    command: '-u "${SAMBA_USER};${SAMBA_PASSWORD}" -s "shared;/shared;yes;no;no;leandro;;leandro;" ' 
+    stdin_open: true
+    tty: true
+    environment:
+      - TZ=America/Argentina/Buenos Aires
+    ports:
+      - 139:139
+      - 445:445
+    volumes:
+      - ./shared:/shared
+    networks:
+      dockerserver_network:
+        ipv4_address: 10.0.1.5
   freqtrade:
     image: freqtradeorg/freqtrade:stable
     restart: unless-stopped
@@ -46,7 +62,7 @@ services:
   portainer:
     image: portainer/portainer-ce:2.21.0
     ports:
-      - 8000:8000
+      - 9000:9000
       - 9443:9443
     restart: always
     volumes:
