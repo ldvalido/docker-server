@@ -78,6 +78,8 @@ services:
     environment:
       - USERS=${FTP_USERS}
     restart: always
+    volumes:
+      - ./shared:/ftp
     networks:
       dockerserver_network:
         ipv4_address: 10.0.1.5
