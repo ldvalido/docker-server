@@ -38,7 +38,7 @@ services:
       - redisdata:/data
     networks:
       paperless_network:
-        ipv4_address: 10.0.2.2
+        ipv4_address: 10.0.3.2
 
   db:
     image: docker.io/library/postgres:16
@@ -51,7 +51,7 @@ services:
       POSTGRES_PASSWORD: paperless
     networks:
       paperless_network:
-        ipv4_address: 10.0.2.3
+        ipv4_address: 10.0.3.3
 
   webserver:
     image: ghcr.io/paperless-ngx/paperless-ngx:latest
@@ -77,7 +77,7 @@ services:
       PAPERLESS_TIKA_ENDPOINT: http://tika:9998
     networks:
       paperless_network:
-        ipv4_address: 10.0.2.4
+        ipv4_address: 10.0.3.4
 
   gotenberg:
     image: docker.io/gotenberg/gotenberg:8.7
@@ -92,14 +92,14 @@ services:
     
     networks:
       paperless_network:
-        ipv4_address: 10.0.2.5
+        ipv4_address: 10.0.3.5
 
   tika:
     image: docker.io/apache/tika:latest
     restart: unless-stopped
     networks:
       paperless_network:
-        ipv4_address: 10.0.2.6
+        ipv4_address: 10.0.3.6
 
 volumes:
   data:
@@ -112,4 +112,4 @@ networks:
       name: 'paperless_network'
       ipam:
           config:
-            - subnet: 10.0.2.0/24
+            - subnet: 10.0.3.0/24
