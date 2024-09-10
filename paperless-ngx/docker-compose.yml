@@ -36,6 +36,9 @@ services:
     restart: unless-stopped
     volumes:
       - redisdata:/data
+    networks:
+      paperless_network:
+        ipv4_address: 10.0.2.2
 
   db:
     image: docker.io/library/postgres:16
@@ -46,6 +49,9 @@ services:
       POSTGRES_DB: paperless
       POSTGRES_USER: paperless
       POSTGRES_PASSWORD: paperless
+    networks:
+      paperless_network:
+        ipv4_address: 10.0.2.3
 
   webserver:
     image: ghcr.io/paperless-ngx/paperless-ngx:latest
@@ -69,6 +75,9 @@ services:
       PAPERLESS_TIKA_ENABLED: 1
       PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://gotenberg:3000
       PAPERLESS_TIKA_ENDPOINT: http://tika:9998
+    networks:
+      paperless_network:
+        ipv4_address: 10.0.2.4
 
   gotenberg:
     image: docker.io/gotenberg/gotenberg:8.7
@@ -80,13 +89,27 @@ services:
       - "gotenberg"
       - "--chromium-disable-javascript=true"
       - "--chromium-allow-list=file:///tmp/.*"
+    
+    networks:
+      paperless_network:
+        ipv4_address: 10.0.2.5
 
   tika:
     image: docker.io/apache/tika:latest
     restart: unless-stopped
+    networks:
+      paperless_network:
+        ipv4_address: 10.0.2.6
 
 volumes:
   data:
   media:
   pgdata:
   redisdata:
+
+networks:
+  paperless_network:
+      name: 'paperless_network'
+      ipam:
+          config:
+            - subnet: 10.0.2.0/24
