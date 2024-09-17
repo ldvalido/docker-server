@@ -79,6 +79,9 @@ services:
     restart: always
     volumes:
       - uptime-kuma:/app/data
+    networks:
+      dockerserver_network:
+        ipv4_address: 10.0.1.7
   alpine_ftp:
     image: delfer/alpine-ftp-server
     ports:
