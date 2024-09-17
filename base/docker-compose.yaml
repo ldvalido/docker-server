@@ -72,6 +72,13 @@ services:
     networks:
       dockerserver_network:
         ipv4_address: 10.0.1.4
+  uptime_kuma:
+    image: louislam/uptime-kuma:1
+    ports: 
+    - 3001:3001
+    restart: always
+    volumes:
+      - uptime-kuma:/app/data
   alpine_ftp:
     image: delfer/alpine-ftp-server
     ports:
@@ -88,6 +95,7 @@ volumes:
   pihole_data:
   pihole_dnsmasq:
   portainer_data:
+  uptime-kuma:
 networks:
   dockerserver_network:
       name: 'dockerserver_network'
