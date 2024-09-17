@@ -79,6 +79,8 @@ services:
     restart: always
     volumes:
       - uptime-kuma:/app/data
+    secrets:
+      - example_secret
   alpine_ftp:
     image: delfer/alpine-ftp-server
     ports:
@@ -96,6 +98,9 @@ volumes:
   pihole_dnsmasq:
   portainer_data:
   uptime-kuma:
+secrets:
+  example_secret: 
+    file: ./secret
 networks:
   dockerserver_network:
       name: 'dockerserver_network'
