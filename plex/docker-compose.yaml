@@ -31,7 +31,7 @@ services:
   radarr:
     image: ghcr.io/hotio/radarr
     ports:
-    - 8090:8989
+    - 8090:7878
     environment:
       PUID: 1000
       PGID: 1000
