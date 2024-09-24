@@ -27,25 +27,24 @@ services:
       UMASK: 002
       TZ: "Etc/UTC"
     volumes:
-      - sonnar_config:/config
+      - sonarr_config:/config
       - ./data:/data
+
+  transmission:
+    image : jaymoulin/transmission:3.00-1.6.1
+    command: transmission-daemon -f -g /config
+    volumes:
+      - ./transmission:/config
+      - ${STORAGE}/torrents:/downloads
+    ports:
+    - 9091:9091
+    - 51413:51413
+    - 51413:51413/udp
+    expose:
+    - 9091
+    restart: unless-stopped
 volumes:
   sonarr_config:
-
-
-  # transmission:
-  #   image : jaymoulin/transmission:3.00-1.6.1
-  #   command: transmission-daemon -f -g /config
-  #   volumes:
-  #     - ./transmission:/config
-  #     - ${STORAGE}/torrents:/downloads
-  #   ports:
-  #     - 9091:9091
-  #     - 51413:51413
-  #     - 51413:51413/udp
-  #   expose:
-  #     - 9091
-  #   restart: unless-stopped
 
   # flexget:
   #   image: wiserain/flexget:3.5
