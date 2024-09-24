@@ -29,7 +29,9 @@ services:
     volumes:
       - sonarr_config:/config
       - ./data:/data
-
+    networks:
+      paperless_network:
+        ipv4_address: 10.0.2.2
   transmission:
     image : jaymoulin/transmission:3.00-1.6.1
     command: transmission-daemon -f -g /config
@@ -43,8 +45,17 @@ services:
     expose:
     - 9091
     restart: unless-stopped
+    networks:
+      paperless_network:
+        ipv4_address: 10.0.2.3
 volumes:
   sonarr_config:
+networks:
+  plex_network:
+    name: 'plex_network'
+    ipam:
+        config:
+          - subnet: 10.0.2.0/24
 
   # flexget:
   #   image: wiserain/flexget:3.5
