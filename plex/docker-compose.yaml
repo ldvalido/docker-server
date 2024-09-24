@@ -1,5 +1,3 @@
-version: "3.7"
-
 services:
 
   plex:
@@ -19,6 +17,21 @@ services:
       - ${PLEX_STORAGE}/tmp:/tmp
     restart: unless-stopped
     network_mode: "host" # Solo funciona en Linux
+  sonarr:
+    image: ghcr.io/hotio/sonarr
+    ports:
+    - 8089:8989
+    environment:
+      PUID: 1000
+      PGID: 1000
+      UMASK: 002
+      TZ: "Etc/UTC"
+    volumes:
+      - sonnar_config:/config
+      - ./data:/data
+volumes:
+  sonarr_config:
+
 
   # transmission:
   #   image : jaymoulin/transmission:3.00-1.6.1
