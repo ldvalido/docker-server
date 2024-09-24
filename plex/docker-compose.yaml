@@ -42,7 +42,7 @@ services:
       - ./radarr/data:/data
     networks:
       plex_network:
-        ipv4_address: 10.0.2.2
+        ipv4_address: 10.0.2.4
   transmission:
     image : jaymoulin/transmission:3.00-1.6.1
     command: transmission-daemon -f -g /config
