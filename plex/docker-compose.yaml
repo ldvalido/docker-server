@@ -24,6 +24,9 @@ services:
       TZ: "Etc/UTC"
     volumes:
       - ./prowlar/config:/config
+    networks:
+      plex_network:
+        ipv4_address: 10.0.2.5
      # Solo funciona en Linux
   sonarr:
     image: ghcr.io/hotio/sonarr
