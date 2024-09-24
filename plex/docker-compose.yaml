@@ -24,7 +24,22 @@ services:
       TZ: "Etc/UTC"
     volumes:
       - sonarr_config:/config
-      - ./data:/data
+      - ./sonarr/data:/data
+    networks:
+      plex_network:
+        ipv4_address: 10.0.2.2
+  radarr:
+    image: ghcr.io/hotio/radarr
+    ports:
+    - 8090:8989
+    environment:
+      PUID: 1000
+      PGID: 1000
+      UMASK: 002
+      TZ: "Etc/UTC"
+    volumes:
+      - radarr_config:/config
+      - ./radarr/data:/data
     networks:
       plex_network:
         ipv4_address: 10.0.2.2
@@ -46,6 +61,7 @@ services:
         ipv4_address: 10.0.2.3
 volumes:
   sonarr_config:
+  radarr_config:
 networks:
   plex_network:
     name: 'plex_network'
