@@ -25,7 +25,7 @@ services:
     volumes:
       - sonarr_config:/config
       - ./sonarr/data:/data
-      - ./sonarr/downloads:/downloads
+      - ./sonarr/downloads:/downloads/complete
     networks:
       plex_network:
         ipv4_address: 10.0.2.2
@@ -41,7 +41,7 @@ services:
     volumes:
       - radarr_config:/config
       - ./radarr/data:/data
-      - ./radarr/downloads:/downloads
+      - ./radarr/downloads:/downloads/complete
     networks:
       plex_network:
         ipv4_address: 10.0.2.4
