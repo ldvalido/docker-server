@@ -1,5 +1,3 @@
-version: "3.7"
-
 services:
 
   plex:
@@ -7,10 +5,6 @@ services:
     expose:
       - 32400
       - 33400
-    # Descomentar si NO usas network_mode: "host"
-    # ports:
-    #  - 32400:32400
-    #  - 33400:33400
     environment:
       - TZ=America/Argentina/Buenos Aires
     volumes:
@@ -18,34 +12,76 @@ services:
       - ${PLEX_MEDIA}:/media
       - ${PLEX_STORAGE}/tmp:/tmp
     restart: unless-stopped
-    network_mode: "host" # Solo funciona en Linux
-
-  # transmission:
-  #   image : jaymoulin/transmission:3.00-1.6.1
-  #   command: transmission-daemon -f -g /config
-  #   volumes:
-  #     - ./transmission:/config
-  #     - ${STORAGE}/torrents:/downloads
-  #   ports:
-  #     - 9091:9091
-  #     - 51413:51413
-  #     - 51413:51413/udp
-  #   expose:
-  #     - 9091
-  #   restart: unless-stopped
-
-  # flexget:
-  #   image: wiserain/flexget:3.5
-  #   volumes:
-  #     - ./flexget:/config
-  #     - ./flexget/custom-cont-init.d:/custom-cont-init.d
-  #     - ${STORAGE}/torrents:/downloads
-  #     - ${MEDIA}:/storage
-  #   ports:
-  #     - 5050:5050
-  #   environment:
-  #     - PUID=1001
-  #     - PGID=1001
-  #     - TORRENT_PLUGIN=transmission
-  #     - FG_WEBUI_PASSWD=p3l4d0_N3RD # la puedes cambiar por la que quieras
-  #   restart: unless-stopped
+    network_mode: "host"
+  prowlar:
+    image: ghcr.io/hotio/prowlarr
+    ports:
+      - 8091:9696
+    environment:
+      PUID: 1000
+      PGID: 1000
+      UMASK: 002
+      TZ: "Etc/UTC"
+    volumes:
+      - ./prowlar/config:/config
+    networks:
+      plex_network:
+        ipv4_address: 10.0.2.5
+     # Solo funciona en Linux
+  sonarr:
+    image: ghcr.io/hotio/sonarr
+    ports:
+    - 8089:8989
+    environment:
+      PUID: 1000
+      PGID: 1000
+      UMASK: 002
+      TZ: "Etc/UTC"
+    volumes:
+      - sonarr_config:/config
+      - ./sonarr/data:/data
+      - ./sonarr/downloads:/downloads/complete
+    networks:
+      plex_network:
+        ipv4_address: 10.0.2.2
+  radarr:
+    image: ghcr.io/hotio/radarr
+    ports:
+    - 8090:7878
+    environment:
+      PUID: 1000
+      PGID: 1000
+      UMASK: 002
+      TZ: "Etc/UTC"
+    volumes:
+      - radarr_config:/config
+      - ./radarr/data:/data
+      - ./radarr/downloads:/downloads/complete
+    networks:
+      plex_network:
+        ipv4_address: 10.0.2.4
+  transmission:
+    image : jaymoulin/transmission:3.00-1.6.1
+    command: transmission-daemon -f -g /config
+    volumes:
+      - ./transmission/config:/config
+      - ./transmission/torrents:/downloads
+    ports:
+    - 9091:9091
+    - 51413:51413
+    - 51413:51413/udp
+    expose:
+    - 9091
+    restart: unless-stopped
+    networks:
+      plex_network:
+        ipv4_address: 10.0.2.3
+volumes:
+  sonarr_config:
+  radarr_config:
+networks:
+  plex_network:
+    name: 'plex_network'
+    ipam:
+        config:
+          - subnet: 10.0.2.0/24
