@@ -79,7 +79,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /tmp:/tmp
-    entrypoint: ["server","local"]
+    command: ["server","local"]
     networks:
       dockerserver_network:
         ipv4_address: 10.0.1.8
