@@ -115,6 +115,9 @@ services:
     secrets:
       - flame_password # optional but required for (1)
     restart: unless-stopped
+    networks:
+      dockerserver_network:
+        ipv4_address: 10.0.1.9
 volumes:
   flame_data:
   pihole_data:
