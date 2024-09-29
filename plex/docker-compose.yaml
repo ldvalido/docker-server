@@ -60,6 +60,18 @@ services:
     networks:
       plex_network:
         ipv4_address: 10.0.2.4
+  bazarr:
+    image: lscr.io/linuxserver/bazarr
+    ports:
+    - 8092:6767
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    restart: unless-stopped
+    networks:
+      plex_network:
+        ipv4_address: 10.0.2.6
   transmission:
     image : jaymoulin/transmission:3.00-1.6.1
     command: transmission-daemon -f -g /config
