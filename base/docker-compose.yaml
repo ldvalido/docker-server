@@ -39,7 +39,7 @@ services:
     volumes:
       - ./shared:/shared
       - ../plex/plex_media/:/mnt/mnt/old_disk/media
-      - /etc/samba/smb.conf:./samba/smb.conf:rw
+      - ./samba/smb.conf:/etc/samba/smb.conf:rw
     networks:
       dockerserver_network:
         ipv4_address: 10.0.1.5
