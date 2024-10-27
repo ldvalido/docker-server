@@ -38,7 +38,7 @@ services:
       - 445:445
     volumes:
       - ./shared:/shared
-      - ../plex/plex_media/:/plex
+      - ../plex/plex_media/:/mnt/mnt/old_disk/media
       - /etc/samba/smb.conf:./samba/smb.conf:rw
     networks:
       dockerserver_network:
