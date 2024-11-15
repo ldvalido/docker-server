@@ -119,12 +119,51 @@ services:
     networks:
       dockerserver_network:
         ipv4_address: 10.0.1.9
+  kopia:
+    image: kopia/kopia:latest
+    hostname: Hostname
+    restart: unless-stopped
+    ports:
+        - 51515:51515
+    # Setup the server that provides the web gui
+    command:
+        - server
+        - start
+        - --disable-csrf-token-checks
+        - --insecure
+        - --address=0.0.0.0:51515
+        - --server-username=${KOPIA_SERVER_USERNAME}
+        - --server-password=${KOPIA_SERVER_PWD}
+    environment:
+        # Set repository password
+        KOPIA_PASSWORD: ${KOPIA_REPO_PWD}
+        USER: ${KOPIA_REPO_USERNAME}
+    networks:
+      dockerserver_network:
+        ipv4_address: 10.0.1.10
+    volumes:
+        # Mount local folders needed by kopia
+        - kopia_config:/app/config
+        - kopia_cache:/app/cache
+        - kopia_logs:/app/logs
+        # Mount local folders to snapshot
+        - kopia_data:/data:ro
+        # Mount repository location
+        - kopia_repo:/repository
+        # Mount path for browsing mounted snaphots
+        - kopia_tmp:/tmp:shared
 volumes:
   flame_data:
   pihole_data:
   pihole_dnsmasq:
   portainer_data:
   uptime-kuma:
+  kopia_config:
+  kopia_cache:
+  kopia_logs:
+  kopia_data:
+  kopia_repo:
+  kopia_tmp:
 secrets:
   flame_password:
     file: ./secret/flame_password
