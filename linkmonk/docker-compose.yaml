@@ -7,12 +7,9 @@ services:
   # listmonk app
   app:
     image: listmonk/listmonk:latest
-    container_name: listmonk_app
     restart: unless-stopped
     ports:
-      - "9000:9000"                                           # To change the externally exposed port, change to: $custom_port:9000
-    networks:
-      - listmonk
+      - "9090:9000"                                           # To change the externally exposed port, change to: $custom_port:9000
     hostname: listmonk.example.com                            # Recommend using FQDN for hostname
     depends_on:
       - db
@@ -38,7 +35,9 @@ services:
     volumes:
       - ./uploads:/listmonk/uploads:rw                        # Mount an uploads directory on the host to /listmonk/uploads inside the container.
                                                               # To use this, change directory path in Admin -> Settings -> Media to /listmonk/uploads
-
+    networks:
+      listmonk_network:
+        ipv4_address: 10.0.5.3
   # Postgres database
   db:
     image: postgres:17-alpine
@@ -46,8 +45,6 @@ services:
     restart: unless-stopped
     ports:
       - "5432:5432"
-    networks:
-      - listmonk
     environment:
       <<: *db-credentials
     healthcheck:
@@ -59,9 +56,14 @@ services:
       - type: volume
         source: listmonk-data
         target: /var/lib/postgresql/data
-
+    networks:
+      listmonk_network:
+        ipv4_address: 10.0.5.2
 networks:
-  listmonk:
-
+  listmonk_network:
+    ipam:
+      config:
+        - subnet: 10.0.5.0/24
 volumes:
   listmonk-data:
+      
