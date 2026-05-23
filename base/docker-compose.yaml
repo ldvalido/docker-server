@@ -55,17 +55,17 @@ services:
     networks:
       dockerserver_network:
         ipv4_address: 10.0.1.4
-  kestra:
-    image: kestra/kestra:latest
-    ports:
-    - 8085:8080
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /tmp:/tmp
-    command: ["server","local"]
-    networks:
-      dockerserver_network:
-        ipv4_address: 10.0.1.8
+  # kestra:
+  #   image: kestra/kestra:latest
+  #   ports:
+  #   - 8085:8080
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #     - /tmp:/tmp
+  #   command: ["server","local"]
+  #   networks:
+  #     dockerserver_network:
+  #       ipv4_address: 10.0.1.8
   uptime_kuma:
     image: louislam/uptime-kuma:2.3.2
     ports: 
@@ -147,8 +147,6 @@ volumes:
       o: bind
       type: none
       device: ../data/flame_data
-volumes:
-  flame_data:
   pihole_data:
     driver: local
     driver_opts:
