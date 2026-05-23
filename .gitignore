@@ -2,3 +2,4 @@
 secret
 .gitignore
 data/
+sonarqube-exporter
