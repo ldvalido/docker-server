@@ -147,6 +147,8 @@ volumes:
       o: bind
       type: none
       device: ../data/flame_data
+volumes:
+  flame_data:
   pihole_data:
     driver: local
     driver_opts:
@@ -177,6 +179,7 @@ volumes:
   kopia_data:
   kopia_repo:
   kopia_tmp:
+  uptime-kuma:
 secrets:
   flame_password:
     file: ./secret/flame_password

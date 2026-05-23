@@ -112,6 +112,7 @@ volumes:
       o: bind
       type: none
       device: ${PLEX_ROOT_STORAGE}/prowlarr/prowlarr_config
+  radarr_config:
 networks:
   plex_network:
     name: 'plex_network'
