@@ -1,32 +1,31 @@
 services:
-
-  plex:
-    image: jaymoulin/plex:1.41.0.8992
-    expose:
-      - 32400
-      - 33400
-    environment:
-      - TZ=America/Argentina/Buenos Aires
-    volumes:
-      - ${PLEX_STORAGE}/Plex Media Server:/root/Library/Application Support/Plex Media Server
-      - ${PLEX_MEDIA}:/media
-      - ${PLEX_STORAGE}/tmp:/tmp
-    restart: unless-stopped
-    network_mode: "host"
-  prowlar:
-    image: ghcr.io/hotio/prowlarr
-    ports:
-      - 8091:9696
-    environment:
-      PUID: 1000
-      PGID: 1000
-      UMASK: 002
-      TZ: "Etc/UTC"
-    volumes:
-      - ./prowlar/config:/config
-    networks:
-      plex_network:
-        ipv4_address: 10.0.2.5
+  # plex:
+  #   image: jaymoulin/plex:1.41.0.8992
+  #   expose:
+  #     - 32400
+  #     - 33400
+  #   environment:
+  #     - TZ=America/Argentina/Buenos Aires
+  #   volumes:
+  #     - ${PLEX_ROOT_STORAGE}${PLEX_STORAGE}:/root/Library/Application Support/Plex Media Server
+  #     - ${PLEX_MEDIA}:/media
+  #     - ${PLEX_ROOT_STORAGE}/plex/tmp:/tmp
+  #   restart: unless-stopped
+  #   network_mode: "host"
+  # prowlar:
+  #   image: ghcr.io/hotio/prowlarr
+  #   ports:
+  #     - 8091:9696
+  #   environment:
+  #     PUID: 1000
+  #     PGID: 1000
+  #     UMASK: 002
+  #     TZ: "Etc/UTC"
+  #   volumes:
+  #     - prowlar_config:/config
+  #   networks:
+  #     plex_network:
+  #       ipv4_address: 10.0.2.5
      # Solo funciona en Linux
   sonarr:
     image: ghcr.io/hotio/sonarr
@@ -39,8 +38,8 @@ services:
       TZ: "Etc/UTC"
     volumes:
       - sonarr_config:/config
-      - ./sonarr/data:/data
-      - ./sonarr/downloads:/downloads/complete
+      - ${PLEX_ROOT_STORAGE}/sonarr/data:/data
+      - ${PLEX_ROOT_STORAGE}/sonnar/downloads:/downloads/complete
     networks:
       plex_network:
         ipv4_address: 10.0.2.2
@@ -55,8 +54,8 @@ services:
       TZ: "Etc/UTC"
     volumes:
       - radarr_config:/config
-      - ./radarr/data:/data
-      - ./radarr/downloads:/downloads/complete
+      - ${PLEX_ROOT_STORAGE}/radarr/data:/data
+      - ${PLEX_ROOT_STORAGE}/radarr/downloads:/downloads/complete
     networks:
       plex_network:
         ipv4_address: 10.0.2.4
@@ -76,8 +75,8 @@ services:
     image : jaymoulin/transmission:3.00-1.6.1
     command: transmission-daemon -f -g /config
     volumes:
-      - ./transmission/config:/config
-      - ./transmission/torrents:/downloads
+      - transmission_config:/config
+      - ${PLEX_ROOT_STORAGE}/transmission/torrents:/downloads
     ports:
     - 9091:9091
     - 51413:51413
@@ -90,6 +89,29 @@ services:
         ipv4_address: 10.0.2.3
 volumes:
   sonarr_config:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ${PLEX_ROOT_STORAGE}/sonarr/sonarr_config
+  radarr_config:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ${PLEX_ROOT_STORAGE}/radarr/radarr_config
+  transmission_config:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ${PLEX_ROOT_STORAGE}/transmission/transmission_config
+  prowlar_config:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ${PLEX_ROOT_STORAGE}/prowlarr/prowlarr_config
   radarr_config:
 networks:
   plex_network:

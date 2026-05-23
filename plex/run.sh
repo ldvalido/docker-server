@@ -1,2 +1,2 @@
-docker-compose --env-file .env down --remove-orphans
-docker-compose --env-file .env up -d
+docker-compose --env-file docker-compose.env down --remove-orphans build
+docker-compose --env-file docker-compose.env up -d
